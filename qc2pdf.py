@@ -1,6 +1,7 @@
 #pip install Pillow
 #pip install qrcode
 #pip install reportlab
+#source ~/py_envs/bin/activate
 
 import qrcode
 from reportlab.pdfgen import canvas
