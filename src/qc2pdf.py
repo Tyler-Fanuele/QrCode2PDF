@@ -28,6 +28,8 @@ cell_width = usable_width / cols
 cell_height = usable_height / rows
 
 image_size = 72  # Set image size (width & height)
+image_width = 72
+image_height = 72
 
 border_padding = 10  # Additional space around each image
 
@@ -39,29 +41,36 @@ for col in range(cols + 1):
     x = margin_x + (col * cell_width)
     c.line(x, page_height - margin_y, x, page_height - margin_y - usable_height)  # Vertical line
 
-i = 1
+i = 0
 # Draw the grid
 for row in range(rows + 1):
     for col in range(cols + 1):
 
         # Data to be encoded
-        data = str(i)
+        data = f"http://10.0.0.147:8001/items/{i}/details"
 
         i = i + 1
 
         # Generate QR Code
-        img = qrcode.make(data)
-        
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+
+        qr.add_data(data)
+        img = qr.make_image(fill_color="black", back_color="white")
         image_path = f"{i}simple_qrcode.png"
         
         # Save the image
         img.save(image_path)
         
-        x = margin_x + (col * cell_width) - (image_size / 2)  # Center images on intersection
-        y = page_height - margin_y - (row * cell_height) - (image_size / 2)
+        x = margin_x + (col * cell_width) - (image_width / 2)  # Center images on intersection
+        y = page_height - margin_y - (row * cell_height) - (image_height / 2)
 
         # Draw image at the intersection point
-        c.drawImage(image_path, x, y, width=image_size, height=image_size)
+        c.drawImage(image_path, x, y, width=image_width, height=image_height)
 
         os.remove(image_path)
         
